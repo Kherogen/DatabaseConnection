@@ -407,7 +407,32 @@ namespace DatabaseConnection
                 MenuRegion();
             }
         }
-       
+        /* public void MenuInsertRegion()
+         {
+             Console.WriteLine("INPUT DATA : ");
+             *//*
+                         string InputRegion = Console.ReadLine();
+                         InsertToRegion(InputRegion);
+
+                         regions = GetAllRegions();
+                         foreach (var region in regions)
+                         {
+                             Console.WriteLine("Id : " + region.Id + ", Name " + region.Name);
+                         }*//*
+
+             Console.WriteLine("INSERT");S
+             Console.Write("Masukkan Nama Region :");
+             string name = Console.ReadLine();
+             int isInsertSuccessfull = reg.InsertToRegion(name);
+             if (isInsertSuccessfull > 0)
+             {
+                 Console.WriteLine("Data Berhasil Ditambahkan !");
+             }
+             else
+             {
+                 Console.WriteLine("Data Gagal Ditambahkan");
+             }
+         }*/
 
         public int Id { get; set; }
         public string Name { get; set; }

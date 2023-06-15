@@ -9,22 +9,19 @@ namespace DatabaseConnection
 {
   public class Histories
     {
-        public string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-
-        public SqlConnection connection;
+        SqlConnection connection = MyConnection.Get();
 
         public List<Histories> GettAllHist()
         {
+            SqlConnection connection = MyConnection.Get();
             var hist = new List<Histories>();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance Untuk Command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_tr_histories";
                 //Membuka Koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -64,11 +61,31 @@ namespace DatabaseConnection
         }
         public void MenuHist()
         {
-            connection = new SqlConnection(connectionString);
+            Console.Clear();
+            Menu menu = new Menu();
             List<Histories> hist = GettAllHist();
             foreach (Histories his in hist)
             {
                 Console.WriteLine("Start DATE : " + his.start_date + " EMPLOYEE ID : " + his.employee_id + " END DATE : " + his.end_date + " Department ID :  " + his.department_id + " JOB ID : " + his.job_id);
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("1.Kembali");
+            try
+            {
+
+                Console.Write("Pilih Menu : ");
+                int InputPilihan = int.Parse(Console.ReadLine());
+
+                switch (InputPilihan)
+                {
+                    case 1:
+                        menu.MenuDb();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         public DateTime start_date { get; set; }

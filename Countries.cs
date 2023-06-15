@@ -10,17 +10,15 @@ namespace DatabaseConnection
     public class Countries
     {
 
-        public string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-
-        public SqlConnection connection;
+  
+        SqlConnection connection = MyConnection.Get();
 
         public List<Countries> GetAllCountries()
         {
             var countries = new List<Countries>();
-
+            SqlConnection connection = MyConnection.Get();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance untuk command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
@@ -28,7 +26,6 @@ namespace DatabaseConnection
 
 
                 //Membuka koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -55,24 +52,23 @@ namespace DatabaseConnection
                 Console.WriteLine(ex.Message);
             }
 
-
+            connection.Close();
             return countries;
 
         }
         public List<Countries> GetAllById(string id)
         {
-
+            SqlConnection connection = MyConnection.Get();
             var countries = new List<Countries>();
             /*connection = new SqlConnection(connectionString);*/
             try
             {
 
                 //Membuat Instance untuk command
-                connection = new SqlConnection(connectionString);
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_countries WHERE id = @country_id ";
-                connection.Open();
+
 
                 //Membuat Parameter
                 SqlParameter pId = new SqlParameter();
@@ -113,9 +109,7 @@ namespace DatabaseConnection
         public int InsertCountries(string id, string name, int reg_id)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-
-            connection.Open();
+            SqlConnection connection = MyConnection.Get();
 
             SqlTransaction transaction = connection.BeginTransaction();
 
@@ -172,8 +166,7 @@ namespace DatabaseConnection
         public int UpdateCountries(string id, string name, int reg_id)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            SqlConnection connection = MyConnection.Get();
             SqlTransaction transaction = connection.BeginTransaction();
 
             try
@@ -234,8 +227,7 @@ namespace DatabaseConnection
         public int DeleteCountries(string id)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            SqlConnection connection = MyConnection.Get();
             SqlTransaction transaction = connection.BeginTransaction();
             try
             {
@@ -279,16 +271,14 @@ namespace DatabaseConnection
 
 
 
-
+            connection.Close();
             return result;
         }
 
         public void MenuCountries()
         {
+            Menu menu = new Menu();
 
-
-            connection = new SqlConnection(connectionString);
-            //GetAll
             List<Countries> country = GetAllCountries();
             foreach (Countries countries in country)
             {
@@ -312,6 +302,8 @@ namespace DatabaseConnection
             Console.WriteLine("2.Insert");
             Console.WriteLine("3.Update");
             Console.WriteLine("4.Delete");
+            Console.WriteLine("5.Kembali");
+
 
             try
             {
@@ -331,6 +323,9 @@ namespace DatabaseConnection
                     case 4:
                         MenuDelete();
                         break;
+                    case 5:
+                        menu.MenuDb();
+                        break;   
                 }
             }
             catch (Exception ex)
@@ -342,7 +337,6 @@ namespace DatabaseConnection
 
         public void MenuGetId()
         {
-            connection = new SqlConnection(connectionString);
             List<Countries> country = GetAllCountries();
             Console.WriteLine("GET ALL BY ID");
             Console.Write("Masukkan ID Region : ");
@@ -357,7 +351,6 @@ namespace DatabaseConnection
         }
         public void MenuInsert()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("INSERT");
             Console.Write("Masukkan ID Countries : ");
             string id = Console.ReadLine();
@@ -380,7 +373,6 @@ namespace DatabaseConnection
         }
         public void MenuUpdate()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("UPATE");
             Console.Write("Masukkan ID : ");
             string id = Console.ReadLine();
@@ -407,7 +399,6 @@ namespace DatabaseConnection
         }
         public void MenuDelete()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("Delete");
             Console.Write("Masukkan ID Yang Ingin Di DELETE : ");
             string reg_id = Console.ReadLine();

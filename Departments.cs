@@ -9,21 +9,19 @@ namespace DatabaseConnection
 {
     public class Departments
     {
-        static string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-        static SqlConnection connection;
+        SqlConnection connection = MyConnection.Get();
 
-        public List<Departments> GettAllDep()
+        public List<Departments> GetAllDep()
         {
+            SqlConnection connection = MyConnection.Get();
             var deps = new List<Departments>();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance Untuk Command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_departments";
                 //Membuka Koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -54,11 +52,32 @@ namespace DatabaseConnection
         }
         public void MenuDep()
         {
-            connection = new SqlConnection(connectionString);
-            List<Departments> deps = GettAllDep();
+            Console.Clear();
+            Menu menu = new Menu();
+            List<Departments> deps = GetAllDep();
             foreach (Departments dep in deps)
             {
                 Console.WriteLine(" Id : " + dep.id + " NAME : " + dep.name + " LOCATION ID : " + dep.location_id+ " MANAGER ID : " + dep.manager_id);
+            }
+
+            Console.WriteLine("\n");
+            Console.WriteLine("1.Kembali");
+            try
+            {
+
+                Console.Write("Pilih Menu : ");
+                int InputPilihan = int.Parse(Console.ReadLine());
+
+                switch (InputPilihan)
+                {
+                    case 1:
+                        menu.MenuDb();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         public int id { get; set; }

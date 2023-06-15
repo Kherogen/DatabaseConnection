@@ -15,11 +15,10 @@ namespace DatabaseConnection
         Departments dep = new Departments();
         Employees emp = new Employees();
         Histories his = new Histories();
-        static string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-
-        static SqlConnection connection;
+        LINQ linq = new LINQ();
         public void MenuDb() 
         {
+            Console.Clear();
             Console.WriteLine("1.Countries");
             Console.WriteLine("2.Regions");
             Console.WriteLine("3.Locations");
@@ -27,6 +26,8 @@ namespace DatabaseConnection
             Console.WriteLine("5.Departments");
             Console.WriteLine("6.Employees");
             Console.WriteLine("7.Histories");
+            Console.WriteLine("8.LINQ");
+            Console.WriteLine("9.EXIT");
 
             try
             {
@@ -36,26 +37,39 @@ namespace DatabaseConnection
                 switch (InputPilihan)
                 {
                     case 1:
+                        Console.Clear();
                         cou.MenuCountries();
                         break;
                         case 2:
+                        Console.Clear();
                         reg.MenuRegion();
                         break;
                     case 3:
+                        Console.Clear();
                         loc.MenuLocations();
                         break;
                         case 4:
+                        Console.Clear();
                         job.MenuJobs();
                         break;
                     case 5:
+                        Console.Clear();
                         dep.MenuDep();
                         break;
                     case 6:
+                        Console.Clear();
                         emp.MenuEmp();
                         break;
                     case 7:
+                        Console.Clear();
                         his.MenuHist();
                             break;
+                    case 8:
+                       linq.MenuLINQ();
+                        break;
+                        case 9:
+                        System.Environment.Exit(0);
+                        break;
                 }
             }
             catch (Exception ex) 

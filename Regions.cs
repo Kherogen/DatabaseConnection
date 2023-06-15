@@ -10,18 +10,15 @@ namespace DatabaseConnection
 
     public class Regions
     {
-        public string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-
-       public SqlConnection connection;
+        SqlConnection connection = MyConnection.Get();
         public List<Regions> GetAllRegions()
 
         {
 
             var region = new List<Regions>();
-
+            SqlConnection connection = MyConnection.Get();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance untuk command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
@@ -29,7 +26,6 @@ namespace DatabaseConnection
                 
 
                 //Membuka koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -60,18 +56,16 @@ namespace DatabaseConnection
         
         public List<Regions> GetAllById(int id)
         {
-          
+            SqlConnection connection = MyConnection.Get();
             var region = new List<Regions>();
             /*connection = new SqlConnection(connectionString);*/
             try
             {
              
                 //Membuat Instance untuk command
-                connection = new SqlConnection(connectionString);
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_regions WHERE id = @region_id ";
-                connection.Open();
 
                 //Membuat Parameter
                 SqlParameter pId = new SqlParameter();
@@ -111,8 +105,7 @@ namespace DatabaseConnection
         public int UpdateRegion(string name, int id)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            SqlConnection connection = MyConnection.Get();
             SqlTransaction transaction = connection.BeginTransaction();
 
             try
@@ -169,8 +162,7 @@ namespace DatabaseConnection
         public int DeleteRegion(int id)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            SqlConnection connection = MyConnection.Get();
             SqlTransaction transaction = connection.BeginTransaction();
             try
             {
@@ -221,10 +213,7 @@ namespace DatabaseConnection
         public int InsertToRegion(string name)
         {
             int result = 0;
-            connection = new SqlConnection(connectionString);
-
-            connection.Open();
-
+            SqlConnection connection = MyConnection.Get();
             SqlTransaction transaction = connection.BeginTransaction();
 
             try
@@ -269,9 +258,8 @@ namespace DatabaseConnection
 
         public void MenuRegion()
         {
-
+            Menu menu = new Menu();
             Console.Clear();
-            connection = new SqlConnection(connectionString);
             //GetAll
             List<Regions> regions = GetAllRegions();
             foreach (Regions region in regions)
@@ -296,9 +284,11 @@ namespace DatabaseConnection
             Console.WriteLine("2.Insert");
             Console.WriteLine("3.Update");
             Console.WriteLine("4.Delete");
+            Console.WriteLine("5.Kembali");
 
             try
             {
+                
                 Console.Write("Pilih Menu : ");
                 int InputPilihan = int.Parse(Console.ReadLine());
 
@@ -316,6 +306,9 @@ namespace DatabaseConnection
                     case 4:
                         MenuDelete();
                         break;
+                    case 5:
+                        menu.MenuDb();
+                        break;
                 }
             }
             catch (Exception ex)
@@ -327,7 +320,6 @@ namespace DatabaseConnection
 
         public void MenuGetId()
         {
-            connection = new SqlConnection(connectionString);
             List<Regions> regions = GetAllRegions();
             Console.WriteLine("GET ALL BY ID");
             Console.Write("Masukkan ID Region : ");
@@ -342,7 +334,6 @@ namespace DatabaseConnection
         }
         public void MenuUpdate()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("UPATE");
             Console.Write("Masukkan ID :");
             int reg_id = int.Parse(Console.ReadLine());
@@ -367,7 +358,6 @@ namespace DatabaseConnection
         }
         public void MenuDelete()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("Delete");
             Console.Write("Masukkan ID Yang Ingin Di DELETE : ");
             int reg_id = int.Parse(Console.ReadLine());
@@ -390,7 +380,6 @@ namespace DatabaseConnection
         }
         public void MenuInsert()
         {
-            connection = new SqlConnection(connectionString);
             Console.WriteLine("INSERT");
             Console.Write("Masukkan Nama Region :");
             string name = Console.ReadLine();

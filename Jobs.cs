@@ -9,21 +9,19 @@ namespace DatabaseConnection
 {
    public class Jobs
     {
-        static string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-        static SqlConnection connection;
+        SqlConnection connection = MyConnection.Get();
 
-        public List<Jobs> GettAllJob()
+        public List<Jobs> GetAllJob()
         {
+            SqlConnection connection = MyConnection.Get();
             var jobs = new List<Jobs>();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance Untuk Command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_jobs";
                 //Membuka Koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -54,12 +52,31 @@ namespace DatabaseConnection
         }
         public void MenuJobs()
         {
-            connection = new SqlConnection(connectionString);
-            List<Jobs> jobs = GettAllJob();
+            Console.Clear();
+            Menu menu = new Menu();
+            List<Jobs> jobs = GetAllJob();
             foreach (Jobs job in jobs)
             {
                 Console.WriteLine("Id : " + job.id + " Tittle : " + job.tittle + " Min Salary : " + job.min_salary + " Max Salary : " + job.max_salary);
-                Console.ReadKey();
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("1.Kembali");
+            try
+            {
+
+                Console.Write("Pilih Menu : ");
+                int InputPilihan = int.Parse(Console.ReadLine());
+
+                switch (InputPilihan)
+                {
+                    case 1:
+                        menu.MenuDb();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         public string id { get; set; }

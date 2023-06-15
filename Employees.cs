@@ -9,21 +9,19 @@ namespace DatabaseConnection
 {
     public class Employees
     {
-        static string connectionString = "Data Source=DESKTOP-QR71B46;Database=db_hr;Integrated Security=True;Connect Timeout=30;";
-        static SqlConnection connection;
+        SqlConnection connection = MyConnection.Get();
 
-        public List<Employees> GettAllEmp()
+        public List<Employees> GetAllEmp()
         {
+            SqlConnection connection = MyConnection.Get();
             var emp = new List<Employees>();
             try
             {
-                connection = new SqlConnection(connectionString);
                 //Membuat Instance Untuk Command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_employees";
                 //Membuka Koneksi
-                connection.Open();
 
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
@@ -68,11 +66,31 @@ namespace DatabaseConnection
         }
         public void MenuEmp()
         {
-            connection = new SqlConnection(connectionString);
-            List<Employees> emps = GettAllEmp();
+            Console.Clear();
+            Menu menu = new Menu();
+            List<Employees> emps = GetAllEmp();
             foreach (Employees emp in emps)
             {
                 Console.WriteLine("Id : " + emp.id + " FIRST NAME : " + emp.first_name + " LAST NAME : " + emp.last_name + " EMAIL : " + emp.email + " PHONE NUMBER : "+ emp.phone_number + " HIRE DATE : " + emp.hire_date + " SALARY : " + emp.salary +" COMISSION PCT : " + emp.comission_pct + " MANAGER ID : " + emp.manager_id + " JOB ID : " + emp.job_id + " DEPARTMENT ID : " + emp.department_id );
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("1.Kembali");
+            try
+            {
+
+                Console.Write("Pilih Menu : ");
+                int InputPilihan = int.Parse(Console.ReadLine());
+
+                switch (InputPilihan)
+                {
+                    case 1:
+                        menu.MenuDb();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         public int id { get; set; }

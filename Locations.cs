@@ -28,7 +28,7 @@ namespace DatabaseConnection
                 using SqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows)
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         var loc = new Locations();
                         loc.id = reader.GetInt32(0);
@@ -56,11 +56,32 @@ namespace DatabaseConnection
         }
         public void MenuLocations()
         {
+            Menu menu = new Menu();
+            Console.Clear();
             connection = new SqlConnection(connectionString);
             List<Locations> locations = GettAllLoc();
             foreach (Locations location in locations)
             {
-                Console.WriteLine("Id : " + location.id + " Street : " + location.street + " Postal Code : " + location.post + " City : " + location.city + " State Province : " + location.state + " Country Id : " + location.co_id );
+                Console.WriteLine("Id : " + location.id + " Street : " + location.street + " Postal Code : " + location.post + " City : " + location.city + " State Province : " + location.state + " Country Id : " + location.co_id);
+            }
+            Console.WriteLine("\n");
+            Console.WriteLine("1.Kembali");
+            try
+            {
+
+                Console.Write("Pilih Menu : ");
+                int InputPilihan = int.Parse(Console.ReadLine());
+
+                switch (InputPilihan)
+                {
+                    case 1:
+                        menu.MenuDb();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
         public int id { get; set; }
@@ -69,7 +90,8 @@ namespace DatabaseConnection
         public string city { get; set; }
         public string state { get; set; }
         public string co_id { get; set; }
-     
+
+
     }
-    
+
 }
